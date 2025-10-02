@@ -1,4 +1,3 @@
-# train_vit_rsna.py
 
 import os
 import gc
