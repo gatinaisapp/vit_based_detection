@@ -17,9 +17,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from sklearn.model_selection import StratifiedKFold
 
-# ====================================================
 # 1. Preprocessing Class for DICOM Series
-# ====================================================
 
 class DICOMPreprocessor:
     def __init__(self, target_shape=(32, 384, 384)):
@@ -74,9 +72,7 @@ class DICOMPreprocessor:
         return volume
 
 
-# ====================================================
 # 2. Dataset Class
-# ====================================================
 
 class RSNADataset(Dataset):
     def __init__(self, volume_paths, labels, transform=None):
@@ -101,9 +97,7 @@ class RSNADataset(Dataset):
         return volume, label
 
 
-# ====================================================
 # 3. Model (Vision Transformer)
-# ====================================================
 
 def get_model(num_classes, in_chans=32, model_name="vit_base_patch16_384"):
     model = timm.create_model(
@@ -115,9 +109,7 @@ def get_model(num_classes, in_chans=32, model_name="vit_base_patch16_384"):
     return model
 
 
-# ====================================================
-# 4. Training & Validation Loops
-# ====================================================
+# 4. Training 
 
 def train_one_epoch(model, loader, criterion, optimizer, device, scaler):
     model.train()
@@ -158,9 +150,6 @@ def validate_one_epoch(model, loader, criterion, device):
     return running_loss / len(loader.dataset), preds, gts
 
 
-# ====================================================
-# 5. Full Training Runner with K-Fold
-# ====================================================
 
 def run_training(volume_paths, labels, num_classes, n_folds=5, epochs=10, lr=1e-4, batch_size=2, save_dir="./checkpoints"):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -218,9 +207,7 @@ def run_training(volume_paths, labels, num_classes, n_folds=5, epochs=10, lr=1e-
             torch.cuda.empty_cache()
 
 
-# ====================================================
-# 6. Entry Point
-# ====================================================
+# 5. Entry Point
 
 if __name__ == "__main__":
     # Example usage (replace with real data paths & labels)
